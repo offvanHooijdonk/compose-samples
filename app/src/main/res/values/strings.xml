@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">compose-samples</string>
+
+    <string name="votes_thousand">k</string>
+    <string name="votes_million">m</string>
+    <string name="votes_billion">b</string>
+    <string name="votes_trillion">tr</string>
+</resources>
