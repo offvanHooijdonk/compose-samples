@@ -4,6 +4,7 @@ import android.content.Context
 import by.off.composesamples.R
 import java.math.RoundingMode
 import java.text.NumberFormat
+import kotlin.math.pow
 
 fun votesToString(votes: Long, ctx: Context): String {
     val results = convertVotesPresentation(votes)
@@ -31,7 +32,7 @@ private fun convertVotesPresentation(votes: Long): Pair<String, Int> {
                 maximumFractionDigits = 1
                 minimumFractionDigits = 0
                 roundingMode = RoundingMode.DOWN
-            }.format(votes.toDouble() / Math.pow(1000.0, range.toDouble())) to range
+            }.format(votes.toDouble() / 1000.0.pow(range.toDouble())) to range
         }
         else -> {
             numReduced.toString() to range
