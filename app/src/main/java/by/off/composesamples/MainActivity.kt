@@ -3,11 +3,10 @@ package by.off.composesamples
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animate
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.SpringSpec
-import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
@@ -37,141 +36,20 @@ import androidx.ui.tooling.preview.Preview
 import by.off.composesamples.model.Predict
 import by.off.composesamples.repo.PredictRepo
 import by.off.composesamples.ui.main.ComposeSamplesAppUI
-import by.off.composesamples.ui.prediction.add.PredictAddDialog
+import by.off.composesamples.ui.main.ScreenState
 import by.off.composesamples.ui.res.*
 import by.off.composesamples.ui.votesToString
 
 private var snackFlag = false
 
+@ExperimentalAnimationApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ComposeSamplesAppUI(onBackPressedDispatcher)
+            ComposeSamplesAppUI(/*onBackPressedDispatcher*/)
         }
     }
 }
 
-@Composable
-fun PredictList(predicts: List<Predict>) {
-    LazyColumnFor(contentPadding = PaddingValues(bottom = 4.dp, top = 4.dp), items = predicts) {
-        PredictListItem(predict = it)
-    }
-}
-
-@Composable
-fun PredictListItem(predict: Predict) {
-    Card(elevation = 2.dp, modifier = Modifier.padding(4.dp).clickable(onClick = {
-        snackFlag = true
-    })) {
-        Column(
-            modifier = Modifier.padding(
-                horizontal = dimen_item_row_padding_h,
-                vertical = dimen_item_row_padding_v
-            ).fillMaxWidth()
-        ) {
-            //Row {
-            Text(text = predict.title, style = MaterialTheme.typography.h6)
-            //}
-            Log.i(LOG, "Predict ${predict.id}")
-
-// likes and votes row
-            val liked = remember { mutableStateOf(false) }
-            val likedNum = remember(liked.value) { mutableStateOf(predict.likes + if (liked.value) 1 else 0) }
-            val voteState = remember { mutableStateOf(VoteState.NONE) }
-            val agreedNumber =
-                stateFor(*arrayOf(voteState.value)) { predict.votesUp + if (voteState.value == VoteState.AGREE) 1 else 0 }
-            val disagreedNumber =
-                stateFor(*arrayOf(voteState.value)) { predict.votesDown + if (voteState.value == VoteState.DISAGREE) 1 else 0 }
-
-            Row(modifier = Modifier.layoutId("likesBlock").wrapContentWidth()) {
-                PredictListItemLike(likeState = liked.value, number = likedNum.value) {
-                    liked.value = !liked.value
-                }
-                Spacer(modifier = Modifier.width(16.dp))
-                PredictListItemAgree(voteState.value, agreedNumber.value) {
-                    voteState.value = if (voteState.value == VoteState.AGREE) VoteState.NONE else VoteState.AGREE
-                }
-                Spacer(modifier = Modifier.width(16.dp))
-                PredictListItemDisagree(voteState.value, disagreedNumber.value) {
-                    voteState.value = if (voteState.value == VoteState.DISAGREE) VoteState.NONE else VoteState.DISAGREE
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun AuthorBlock(predict: Predict, modifier: Modifier = Modifier) {
-    Row(modifier.padding(4.dp)) {
-        Text(text = predict.authorName, overflow = TextOverflow.Ellipsis)
-        Spacer(modifier = Modifier.width(8.dp))
-        Image(
-            asset = vectorResource(R.drawable.ic_person_placeholder_24), modifier = Modifier.clip(CircleShape),
-            colorFilter = ColorFilter.tint(colorSecondaryVariant)
-        )
-    }
-}
-
-@Composable
-fun PredictListItemLike(likeState: Boolean, number: Long, onClick: () -> Unit) {
-    ToggleCountIcon(
-        icon = vectorResource(id = R.drawable.ic_fav),
-        state = likeState, number = number, colorActive = color_liked
-    ) { onClick() }
-}
-
-@Composable
-fun PredictListItemAgree(voteState: VoteState, number: Long, onClick: () -> Unit) {
-    val agreedState = voteState == VoteState.AGREE
-
-    ToggleCountIcon(
-        icon = vectorResource(id = R.drawable.ic_agree),
-        state = agreedState, number = number, colorActive = color_agree
-    ) { onClick() }
-}
-
-@Composable
-fun PredictListItemDisagree(voteState: VoteState, number: Long, onClick: () -> Unit) {
-    val stateDisagreed = voteState == VoteState.DISAGREE
-    ToggleCountIcon(
-        icon = vectorResource(id = R.drawable.ic_disagree),
-        state = stateDisagreed, number = number, colorActive = color_disagree
-    ) { onClick() }
-}
-
-@Composable
-fun ToggleCountIcon(
-    icon: VectorAsset,
-    state: Boolean,
-    number: Long,
-    colorActive: Color,
-    onClick: () -> Unit
-) {
-    Box(modifier = Modifier.padding(4.dp).clickable(indication = RippleIndication(bounded = false)) {
-        onClick()
-    }) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            val alpha = animate(if (state) 1.0f else 0.3f)
-            val scale = animate(if (state) 1.0f else 0.9f, SpringSpec(dampingRatio = 0.3f, stiffness = Spring.StiffnessMedium))
-            Box(modifier = Modifier.size(26.dp), alignment = Alignment.Center) {
-                Image(asset = icon, colorFilter = ColorFilter.tint(colorActive), alpha = alpha, contentScale = FixedScale(scale))
-            }
-            Text(text = votesToString(number, ContextAmbient.current))
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ComposeSamplesTheme {
-        PredictList(predicts = PredictRepo.sampleData)
-    }
-}
-
-enum class VoteState(val code: Int) {
-    NONE(0), AGREE(1), DISAGREE(-1)
-}
-
-private const val LOG = "cpmsmpllog"
+const val LOG = "cpmsmpllog"

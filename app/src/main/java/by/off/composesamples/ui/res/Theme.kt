@@ -1,6 +1,7 @@
 package by.off.composesamples.ui.res
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.ButtonConstants
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
@@ -18,7 +19,6 @@ private val LightColorPalette = lightColors(
     primaryVariant = purple700,
     secondary = teal200,
     onSecondary = Color.White,
-
     /* Other default colors to override
 background = Color.White,
 surface = Color.White,
@@ -43,3 +43,8 @@ fun ComposeSamplesTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Co
         content = content
     )
 }
+
+@Composable
+fun defaultButtonColors() = ButtonConstants.defaultButtonColors(backgroundColor = MaterialTheme.colors.secondary)
+@Composable
+fun defaultTextButtonColors() = ButtonConstants.defaultTextButtonColors(contentColor = MaterialTheme.colors.secondary)
