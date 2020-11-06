@@ -5,4 +5,7 @@
     <string name="votes_million">m</string>
     <string name="votes_billion">b</string>
     <string name="votes_trillion">tr</string>
+
+    <string name="label_picker_vote_finishes_at">Finishes at:</string>
+    <string name="label_picker_vote_happens_on">Happens on:</string>
 </resources>

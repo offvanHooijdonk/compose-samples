@@ -38,7 +38,6 @@ fun ComposeSamplesAppUI() {
     ComposeSamplesTheme {
         Box(modifier = Modifier.fillMaxSize()) {
             Surface(color = MaterialTheme.colors.background) {
-
                 Scaffold(
                     topBar = { TopAppBar(title = { Text(text = "Predictions") }) },
                     floatingActionButton = {
