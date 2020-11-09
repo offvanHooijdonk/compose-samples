@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_padding_h">16dp</dimen>
+    <dimen name="activity_padding_v">16dp</dimen>
+
+    <dimen name="dialog_corner">8dp</dimen>
+</resources>
