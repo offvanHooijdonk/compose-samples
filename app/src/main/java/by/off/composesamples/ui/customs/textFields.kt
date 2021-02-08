@@ -8,9 +8,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 
 @Composable
-fun InputText(placeholder: String = "", textVar: MutableState<String>, modifier: Modifier = Modifier.fillMaxWidth()) {
+fun InputText(modifier: Modifier = Modifier, placeholder: String = "", textVar: MutableState<String>) {
     TextField(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         label = { Text(text = placeholder) },
         value = textVar.value,
         onValueChange = { textVar.value = it },
